@@ -73,6 +73,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import LeaveReview from './LeaveReview';
 
+
 const CarDetails = () => {
   const [car, setCar] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -89,7 +90,7 @@ const CarDetails = () => {
       .catch((error) => {
         console.error('Error fetching car data:', error);
       });
-
+    
     // Fetch the reviews for the specific car based on the car ID from the URL
     axios
       .get(`http://localhost:3000/api/reviews?carId=${id}`)
@@ -101,6 +102,27 @@ const CarDetails = () => {
       });
   }, [id]);
 
+  const handleDeleteReview = (reviewId) => {
+    axios
+      .delete(`http://localhost:3000/api/reviews/${reviewId}`)
+      .then((response) => {
+        // After successful deletion, update the reviews state to remove the deleted review
+        setReviews((prevReviews) => prevReviews.filter((review) => review._id !== reviewId));
+      })
+      .catch((error) => {
+        console.error('Error deleting review:', error);
+      });
+    };
+    const fetchReviews = () => {
+      axios
+        .get(`http://localhost:3000/api/reviews?carId=${id}`)
+        .then((response) => {
+          setReviews(response.data);
+        })
+        .catch((error) => {
+          console.error('Error fetching reviews:', error);
+        });
+    };
   const handleLeftArrowClick = () => {
     // Logic to handle left arrow click and change the currentImageIndex accordingly
     setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? car.imageURL.length - 1 : prevIndex - 1));
@@ -114,7 +136,7 @@ const CarDetails = () => {
   if (!car) {
     return <div>Loading...</div>;
   }
-
+  
   return (
     <div className='container'>
       <div className="arrow-container">
@@ -138,8 +160,9 @@ const CarDetails = () => {
             <p>Price: ${car.price}</p>
             <p>Description: {car.description}</p>
           </div>
+          
           {/* Display the reviews */}
-          <div className="reviews">
+           <div className="reviews">
             <h2>Reviews</h2>
             {reviews.length === 0 ? (
               <p>No reviews for this car yet.</p>
@@ -149,21 +172,19 @@ const CarDetails = () => {
                   <li key={review._id}>
                     <p>Rating: {review.rating}</p>
                     <p>Comment: {review.comment}</p>
-                    {/* Add any other review information you want to display */}
+                    <button onClick={() => handleDeleteReview(review._id)}>Delete</button>
                   </li>
                 ))}
               </ul>
             )}
-          </div>
-          <LeaveReview carId={id} />
-        </div>
+          </div> 
+          <LeaveReview carId={id} onReviewSubmitted={fetchReviews} /> 
+         </div> 
         <div className="right-arrow arrow" onClick={handleRightArrowClick}></div>
       </div>
     </div>
   );
 };
 
+
 export default CarDetails;
-
-
-

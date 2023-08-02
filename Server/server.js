@@ -6,6 +6,7 @@ const routes = require('./routes'); // Import the routes folder
 const carRoutes = require('./routes/carRoutes');
 const reviewRoutes = require("./routes/reviewRoutes");
 const db = require('./db'); // Import the db connection
+const path = require('path');
 
 
 
@@ -14,6 +15,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join('sounds')));
 
 // Use the db connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -25,6 +27,7 @@ db.once('open', () => {
 app.use('/api', routes);
 app.use('/api/cars', carRoutes);
 app.use("/api/reviews", reviewRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -11,6 +11,7 @@ const carSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   imageURL: [{ type: String, required: true }],
   description: { type: String, required: true },
+  soundURL: { type: String, required: false },
 })
 
 const Car = mongoose.model('Car', carSchema)
