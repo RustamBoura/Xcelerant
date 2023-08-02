@@ -5,6 +5,7 @@ const cors = require('cors');
 const routes = require('./routes'); // Import the routes folder
 const carRoutes = require('./routes/carRoutes');
 const reviewRoutes = require("./routes/reviewRoutes");
+const userRoutes = require("./routes/userRoutes");
 const db = require('./db'); // Import the db connection
 const path = require('path');
 
@@ -27,6 +28,7 @@ db.once('open', () => {
 app.use('/api', routes);
 app.use('/api/cars', carRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/users", userRoutes)
 
 
 // Error handling middleware
