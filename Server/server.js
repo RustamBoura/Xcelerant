@@ -1,8 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes'); // Import the routes folder
+const carRoutes = require('./routes/carRoutes');
+const reviewRoutes = require("./routes/reviewRoutes");
 const db = require('./db'); // Import the db connection
+
+
 
 const app = express();
 
@@ -18,6 +23,8 @@ db.once('open', () => {
 
 // Use the routes defined in the index.js file
 app.use('/api', routes);
+app.use('/api/cars', carRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

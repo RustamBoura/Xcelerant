@@ -4,7 +4,7 @@ const Car = require('../models/Car')
 exports.getAllCars = async (req, res) => {
   try {
     const cars = await Car.find()
-    res.json(cars)
+    res.status(200).json(cars);
   } catch (error) {
     res.status(500).json({ error: 'Server error' })
   }
